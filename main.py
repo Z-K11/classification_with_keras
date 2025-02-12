@@ -5,6 +5,8 @@ from keras.layers import Input
 from keras.utils import to_categorical
 import matplotlib.pyplot as plt
 from keras.datasets import mnist
+import tensorflow as tf
+print(tf.__version__)
 (xtrain,ytrain),(xtest,ytest)=mnist.load_data()
 print(xtrain.shape)
 plt.imshow(xtrain[0])
@@ -28,9 +30,11 @@ def classification_model():
     model.add(Dense(num_of_pixels,activation='relu'))
     model.add(Dense(100,activation='relu'))
     model.add(Dense(num_of_classes,activation='softmax'))
-    model.compile(optimizer='adam',loss='ategorical_crossentropy',
+    model.compile(optimizer='adam',loss='categorical_crossentropy',
                   metrics=['accuracy'])
     return model
-model =classification_model()
-model.fit(xtrain,ytrain,validation_data=(xtest,ytest),epochs=10,verbose=2)
+model = keras.saving.load_model('./models/classification_model.keras')
+#model.fit(xtrain,ytrain,validation_data=(xtest,ytest),epochs=10,verbose=2)
 scores=model.evaluate(xtest,ytest,verbose=2)
+print('Accuracy {}% \n error {}'.format(scores[1],1-scores[1]))
+model.save('./models/classification_model.keras')
