@@ -24,4 +24,13 @@ print(num_of_classes)
 print(num_of_pixels)
 def classification_model():
     model=Sequential()
-    model.add(input(shape=num_of_pixels))
+    model.add(Input(shape=(num_of_pixels,)))
+    model.add(Dense(num_of_pixels,activation='relu'))
+    model.add(Dense(100,activation='relu'))
+    model.add(Dense(num_of_classes,activation='softmax'))
+    model.compile(optimizer='adam',loss='ategorical_crossentropy',
+                  metrics=['accuracy'])
+    return model
+model =classification_model()
+model.fit(xtrain,ytrain,validation_data=(xtest,ytest),epochs=10,verbose=2)
+scores=model.evaluate(xtest,ytest,verbose=2)
